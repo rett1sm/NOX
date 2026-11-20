@@ -1,0 +1,27 @@
+name: NOX
+options:
+  bundleIdPrefix: com.rett1sm
+  deploymentTarget:
+    iOS: "16.0"
+  developmentLanguage: en
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+targets:
+  NOX:
+    type: application
+    platform: iOS
+    sources:
+      - path: Nox
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rett1sm.NOX
+        PRODUCT_NAME: NOX
+        INFOPLIST_KEY_CFBundleDisplayName: NOX
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_STYLE: Automatic
+        INFOPLIST_KEY_UIFileSharingEnabled: YES
+        INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace: YES
+        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "NOX imports wallpapers selected by you."
