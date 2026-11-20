@@ -9,6 +9,7 @@ struct NoxRootView: View {
     @AppStorage("nox.opacity") private var opacity = 0.92
     @AppStorage("nox.language") private var languageRaw = NoxLanguage.russian.rawValue
     @AppStorage("nox.motion") private var motionEnabled = true
+    @State private var runRespring = false
 
     private var language: String { languageRaw }
     private var theme: NoxTheme {
@@ -22,7 +23,7 @@ struct NoxRootView: View {
 
     var body: some View {
         TabView {
-            HomeView(theme: theme, language: language, motionEnabled: motionEnabled)
+            HomeView(theme: theme, language: language, motionEnabled: motionEnabled, runRespring: $runRespring)
                 .tabItem { Label(L10n.text("tab.home", language: language), systemImage: "house.fill") }
             TweaksView(theme: theme, language: language)
                 .tabItem { Label(L10n.text("tab.tweaks", language: language), systemImage: "slider.horizontal.3") }
@@ -35,6 +36,14 @@ struct NoxRootView: View {
         }
         .tint(theme.accent)
         .preferredColorScheme(.dark)
+        .overlay {
+            if runRespring {
+                // Keep the WebKit refresh surface at the app-window level.
+                RespringRunner()
+                    .brightness(-1.0)
+                    .ignoresSafeArea()
+            }
+        }
     }
 }
 
@@ -95,7 +104,7 @@ private struct HomeView: View {
     let language: String
     let motionEnabled: Bool
     @State private var showingRespringConfirm = false
-    @State private var runRespring = false
+    @Binding var runRespring: Bool
 
     private func t(_ key: String) -> String { L10n.text(key, language: language) }
 
@@ -174,15 +183,6 @@ private struct HomeView: View {
                 Button(t("common.cancel"), role: .cancel) { }
             } message: {
                 Text(t("respring.confirmBody"))
-            }
-            .overlay {
-                if runRespring {
-                    // Keep the WebKit surface full-screen and attached to the
-                    // active window, matching the upstream Erosion presentation.
-                    RespringRunner()
-                        .brightness(-1.0)
-                        .ignoresSafeArea()
-                }
             }
         }
     }
