@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: nox-ios-build
@@ -39,12 +39,44 @@ jobs:
           mkdir -p package/Payload
           cp -R build/Build/Products/Release-iphoneos/NOX.app package/Payload/
           cd package
-          zip -qry ../NOX-0.1.0-dev-unsigned.ipa Payload
+          zip -qry ../NOX-0.1.0-alpha-unsigned.ipa Payload
 
       - name: Upload IPA artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NOX-0.1.0-dev-unsigned-IPA
-          path: NOX-0.1.0-dev-unsigned.ipa
+          name: NOX-0.1.0-alpha-unsigned-IPA
+          path: NOX-0.1.0-alpha-unsigned.ipa
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publish GitHub prerelease
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v0.1.0-alpha
+          target_commitish: ${{ github.sha }}
+          name: NOX 0.1.0 Alpha
+          prerelease: true
+          make_latest: false
+          body: |
+            # NOX 0.1.0 Alpha
+
+            Первая тестовая сборка NOX.
+
+            ## Что уже есть
+            - четыре стиля приложения: Liquid Glass, Material Design, OLED Black и Minimal;
+            - пять языков интерфейса: русский, украинский, белорусский, английский и китайский;
+            - настройка акцентного цвета, скруглений, прозрачности и анимаций;
+            - импорт изображений и видео в локальную библиотеку обоев;
+            - редактор код-панели с предпросмотром;
+            - кнопка Respring на главном экране.
+
+            ## Что пока не подключено
+            - редактор код-панели пока сохраняет только визуальную конфигурацию и не меняет системный экран блокировки;
+            - импортированные обои хранятся в NOX, установка в PosterBoard ещё не подключена;
+            - каталог твиков и системный tweak-backend пока являются каркасом;
+            - сборка не подписана.
+
+            Это ранняя тестовая версия. Перед установкой сохраняйте важные данные.
+          files: NOX-0.1.0-alpha-unsigned.ipa
+          fail_on_unmatched_files: true
