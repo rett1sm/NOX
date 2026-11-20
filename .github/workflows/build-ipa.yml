@@ -8,9 +8,13 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: nox-ios-build
+  cancel-in-progress: true
+
 jobs:
   build:
-    runs-on: macos-26
+    runs-on: macos-26-intel
     steps:
       - name: Checkout
         uses: actions/checkout@v4
