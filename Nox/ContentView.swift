@@ -175,12 +175,13 @@ private struct HomeView: View {
             } message: {
                 Text(t("respring.confirmBody"))
             }
-            .background {
+            .overlay {
                 if runRespring {
+                    // Keep the WebKit surface full-screen and attached to the
+                    // active window, matching the upstream Erosion presentation.
                     RespringRunner()
-                        .frame(width: 2, height: 2)
-                        .opacity(0.01)
-                        .accessibilityHidden(true)
+                        .brightness(-1.0)
+                        .ignoresSafeArea()
                 }
             }
         }
@@ -492,6 +493,31 @@ private struct SettingsView: View {
                                 .buttonStyle(.plain)
                             }
                             Toggle(t("settings.motion"), isOn: $motionEnabled).tint(theme.accent)
+                        }
+                        .noxCard(theme)
+
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text(t("settings.access")).font(.headline).foregroundStyle(.white)
+                            HStack(spacing: 10) {
+                                Image(systemName: "folder").foregroundStyle(theme.accent)
+                                Text(t("settings.filesAccess")).foregroundStyle(.white)
+                                Spacer()
+                                Text(t("settings.selectedOnly"))
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(.green)
+                            }
+                            HStack(spacing: 10) {
+                                Image(systemName: "lock.slash").foregroundStyle(.orange)
+                                Text(t("settings.systemAccess")).foregroundStyle(.white)
+                                Spacer()
+                                Text(t("settings.notConnected"))
+                                    .font(.caption.weight(.semibold))
+                                    .foregroundStyle(.orange)
+                            }
+                            Text(t("settings.accessNote"))
+                                .font(.caption)
+                                .foregroundStyle(.white.opacity(0.52))
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                         .noxCard(theme)
 

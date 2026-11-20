@@ -24,4 +24,3 @@ targets:
         CODE_SIGN_STYLE: Automatic
         INFOPLIST_KEY_UIFileSharingEnabled: YES
         INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace: YES
-        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "NOX imports wallpapers selected by you."

@@ -17,7 +17,14 @@
 
 The appearance settings, translations, local media import and keypad preview are implemented in this scaffold. The keypad editor currently saves a preview configuration; it does **not** yet write to the iOS lock-screen passcode interface. Imported wallpaper files are stored in the app container; PosterBoard installation/injection is not yet connected. The tweak cards are a UI shell until the compatible system backend is integrated and verified.
 
-Respring is wired to the WebKit method used by NeoSpring/Erosion. As with any process-pressure-based SpringBoard refresh method, behavior can vary by iOS build and should be tested on the target device with important data saved first.
+Respring is presented as a full-screen WebKit overlay, following the presentation used by Erosion. It is a best-effort SpringBoard refresh technique, not a normal iOS permission or a guaranteed API; behavior may vary by exact iOS build. If it does not trigger, it can leave the app covered or unresponsive until you close it.
+
+## Permissions and signing
+
+- NOX does not request broad Photos-library or filesystem access. The Files picker grants access only to items the user selects.
+- The current NOX target does **not** include an App Groups entitlement, so it cannot access system containers through an Erosion-style backend yet.
+- The `worse_query` integration used by Erosion requires an App Group identifier authorized by the app's signing entitlements and provisioning profile. Adding a string to the app or showing a permission prompt cannot grant this capability; it must be configured for the App ID and included in the signing profile.
+- There is no standard iOS permission prompt that grants third-party apps unrestricted access to system folders or the lock-screen code keypad.
 
 ## Backend direction
 
